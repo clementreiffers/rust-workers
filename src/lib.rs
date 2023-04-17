@@ -54,10 +54,10 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             Response::ok(version)
         })
         .get("/factorial/:number", |mut req: Request, ctx| {
-            if let Some(name) = ctx.param("number") {
-                let number: u32 = name.trim().parse().expect("Please type a number!");
+            if let Some(number_req) = ctx.param("number") {
+                let number: u32 = number_req.trim().parse().expect("Please type a number!");
                 multiple_factorial(number);
-                Response::ok("done")
+                Response::ok("done with number: ".to_owned() + number_req)
             } else {
                 Response::ok("Please give a number in the request")
             }
