@@ -43,7 +43,7 @@ fn multiple_factorial(n: u32) -> Vec<u32> {
     (0..n).map(factorial).collect::<Vec<u32>>()
 }
 
-fn compute_multiple_factorial_request(mut req: Request, ctx: RouteContext<()>) -> Result<Response> {
+fn compute_multiple_factorial_request(_: Request, ctx: RouteContext<()>) -> Result<Response> {
     if let Some(number_req) = ctx.param("number") {
         let number: u32 = number_req.trim().parse().expect("Please type a number!");
         multiple_factorial(number);
@@ -58,12 +58,12 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
     log_request(&req);
 
     utils::set_panic_hook();
-    let router = Router::new();
-    router
+    Router::new()
         .get("/", |_, _| Response::ok("Hello from Workers!"))
         .post_async("/form/:field", compute_form)
         .get("/worker-version", compute_worker_version)
         .get("/factorial/:number", compute_multiple_factorial_request)
+        .get("/factorial", compute_multiple_factorial_request)
         .run(req, env)
         .await
 }
