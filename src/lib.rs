@@ -1,11 +1,12 @@
-use crate::factorial::compute_multiple_factorial_request;
-use serde_json::json;
-use worker::*;
-
 mod factorial;
 mod linear_regression;
 mod maths;
 mod utils;
+
+use crate::factorial::compute_multiple_factorial_request;
+use crate::linear_regression::compute_linear_regression;
+use serde_json::json;
+use worker::*;
 
 fn log_request(req: &Request) {
     console_log!(
@@ -39,6 +40,17 @@ fn compute_worker_version(_: Request, ctx: RouteContext<()>) -> Result<Response>
     Response::ok(version)
 }
 
+async fn verify_form_send(req: &mut Request) -> Result<Response> {
+    if let Some(file) = req.form_data().await?.get("file") {
+        return match file {
+            FormEntry::File(buf) => Response::ok(&format!("size = {}", buf.bytes().await?.len())),
+            _ => Response::error("`file` part of POST form must be a file", 400),
+        };
+    } else {
+        Response("No such file or directory")
+    }
+}
+
 #[event(fetch)]
 pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Response> {
     log_request(&req);
@@ -50,6 +62,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         .get("/worker-version", compute_worker_version)
         .get("/factorial/:number", compute_multiple_factorial_request)
         .get("/factorial", compute_multiple_factorial_request)
+        .post_async("/linear-regression", compute_linear_regression)
         .run(req, env)
         .await
 }
