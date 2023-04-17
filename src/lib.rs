@@ -1,6 +1,8 @@
+use crate::factorial::compute_multiple_factorial_request;
 use serde_json::json;
-use std::collections::HashMap;
 use worker::*;
+
+mod factorial;
 mod utils;
 
 fn log_request(req: &Request) {
@@ -33,24 +35,6 @@ async fn compute_form(mut req: Request, ctx: RouteContext<()>) -> Result<Respons
 fn compute_worker_version(_: Request, ctx: RouteContext<()>) -> Result<Response> {
     let version = ctx.var("WORKERS_RS_VERSION")?.to_string();
     Response::ok(version)
-}
-
-fn factorial(n: u32) -> u32 {
-    (1..n).product()
-}
-
-fn multiple_factorial(n: u32) -> Vec<u32> {
-    (0..n).map(factorial).collect::<Vec<u32>>()
-}
-
-fn compute_multiple_factorial_request(_: Request, ctx: RouteContext<()>) -> Result<Response> {
-    if let Some(number_req) = ctx.param("number") {
-        let number: u32 = number_req.trim().parse().expect("Please type a number!");
-        multiple_factorial(number);
-        Response::ok("done with number: ".to_owned() + number_req)
-    } else {
-        Response::ok("Please give a number in the request")
-    }
 }
 
 #[event(fetch)]
