@@ -3,6 +3,8 @@ use serde_json::json;
 use worker::*;
 
 mod factorial;
+mod linear_regression;
+mod maths;
 mod utils;
 
 fn log_request(req: &Request) {
