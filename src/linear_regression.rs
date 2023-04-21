@@ -1,6 +1,5 @@
 use crate::maths::{covariance, mean, variance};
-use crate::verify_form_send;
-use worker::{Request, Response, Result, RouteContext};
+use worker::*;
 
 fn _get_a(x: &Vec<f32>, y: &Vec<f32>) -> f32 {
     covariance(&x, &y) / variance(&x)
@@ -17,13 +16,19 @@ fn linear_regression_fn_generator(x: &Vec<f32>, y: &Vec<f32>) -> impl Fn(f32) ->
     move |x| a * x + b
 }
 
-pub fn compute_linear_regression(req: Request, ctx: RouteContext<()>) {
-    // todo: implement
-    // verify_form_send(req.clone());
-    // if let Some(number_req) = ctx.param("number") {
-    //     let number: u32 = number_req.trim().parse().expect("Please type a number!");
-    //     let predictor = linear_regression_fn_generator(&vec![0.0, 0.0], &vec);
-    // } else {
-    // }
-    // Response("done")
+pub async fn compute_linear_regression(req: Request, ctx: RouteContext<()>) -> Result<Response> {
+    /*let form = req.json().await?;
+    match form.get("x") {
+        Some(json::JsonValue::Array) => Response::ok("done"),
+        Some(json::JsonValue::Null) => Response::ok("not done"),
+    }*/
+    Response::ok("done")
+}
+
+pub fn compute_linear_regression_get(_: Request, _: RouteContext<()>) -> Result<Response> {
+    let x = vec![1.0, 2.0, 3.0, 4.0, 5.0];
+    let y = vec![1.0, 2.0, 3.0, 4.0, 5.0];
+
+    let predictor = linear_regression_fn_generator(&x, &y);
+    Response::ok(format!("{:?}", predictor(1.0)))
 }
