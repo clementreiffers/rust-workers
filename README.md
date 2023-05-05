@@ -18,6 +18,13 @@ you need to install [Rust](https://www.rust-lang.org) and [NodeJS](https://nodej
 
 Rust is needed to build the project, and NodeJS to get all requirements to launch the project.
 
+To be able to launch the project in production mode, you need to install all requirements from your OS
+following [this documentation](https://github.com/cloudflare/workerd).
+
+> **Note**
+> if you don't want to install them directly on your machine: 
+> I created a docker on this link : ghcr.io/clementreiffers/workerd:latest
+
 ## Run it
 
 ### Dev Mode
