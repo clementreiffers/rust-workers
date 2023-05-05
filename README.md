@@ -1,24 +1,46 @@
 # Rust to WebAssembly Cloudflare Worker
 
 the Goal is to build a powerful WebAssembly application from Rust, to compute loud calculations instead 
-doing it with JavaScript. It has to work on CloudFlare Workers.
+doing it with JavaScript.
 
-## Usage
+## Overview
 
-With `wrangler`, you can build, test, and deploy your Worker with the following commands: 
+1. [Requirements](#requirements)
+2. [Run it](#run-it)
+   1. [Dev Mode](#dev-mode)
+   2. [Production Mode](#production-mode)
+3. [WebAssembly](#webassembly)
+4. [Links](#links)
+
+## Requirements
+
+you need to install [Rust](https://www.rust-lang.org) and [NodeJS](https://nodejs.org/en).
+
+Rust is needed to build the project, and NodeJS to get all requirements to launch the project.
+
+## Run it
+
+### Dev Mode
+
+With `wrangler`, you can build, and deploy your Worker with the following commands: 
 
 ```bash
-# compiles your project to WebAssembly and will warn of any issues
-wrangler build 
-
 # run your Worker in an ideal development workflow (with a local server, file watcher & more)
-wrangler dev
+npx wrangler dev
 
 # deploy your Worker globally to the Cloudflare network (update your wrangler.toml file for configuration)
-wrangler publish
+npx wrangler publish
 ```
 
+thanks to the `wrangler.toml`, it will build the project before using it.
+
 Read the latest `worker` crate documentation here: https://docs.rs/worker
+
+### Production mode
+
+there is a `Makefile`, so you can run `make run-worker` to have the worker running directly on your machine only using 
+the [workerd runtime](https://github.com/cloudflare/workerd).
+
 
 ## WebAssembly
 
@@ -28,10 +50,8 @@ modules used in Rust-based Workers projects have to compile to the `wasm32-unkno
 
 Read more about this on the [`workers-rs` project README](https://github.com/cloudflare/workers-rs).
 
-## Issues
-
-If you have any problems with the `worker` crate, please open an issue on the upstream project 
-issue tracker on the [`workers-rs` repository](https://github.com/cloudflare/workers-rs).
 
 ## Links
-[Template used for this project](https://github.com/snoyberg/live-coding/tree/e572e7cc827ef425527bbe3e713edd4b617fe225/2021-02-05-snoypredict)
+
+- [Template used for this project](https://github.com/snoyberg/live-coding/tree/e572e7cc827ef425527bbe3e713edd4b617fe225/2021-02-05-snoypredict)
+- [Most simple rust router for WASM Worker](https://github.com/cloudflare/workerd/tree/main/samples/hello-wasm)
