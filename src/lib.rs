@@ -1,9 +1,12 @@
+mod factorial;
+mod linear_regression;
+mod maths;
+mod utils;
+
 use crate::factorial::compute_multiple_factorial_request;
+use crate::linear_regression::compute_linear_regression_get;
 use serde_json::json;
 use worker::*;
-
-mod factorial;
-mod utils;
 
 fn log_request(req: &Request) {
     console_log!(
@@ -48,6 +51,20 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         .get("/worker-version", compute_worker_version)
         .get("/factorial/:number", compute_multiple_factorial_request)
         .get("/factorial", compute_multiple_factorial_request)
+        // .post_async("/linear-regression", compute_linear_regression)
+        // .post_async("/echo-bytes", |mut req, _ctx| async move {
+        //     let data = &req.text().await?.to_string();
+        //     let json_value: DataToReceive = serde_json::from_str(&data)?;
+        //     if let Some(mydata) = json_value.get("nom") {
+        //         let mydata: MyData = serde_json::from_value(mydata.to_owned()).unwrap();
+        //         // utiliser les données ici
+        //         Ok("Le nom est présent dans le JSON.")
+        //     } else {
+        //         Err(warp::reject::not_found())
+        //     }
+        //     Response::ok("done;")
+        // })
+        .get("/linear-regression", compute_linear_regression_get)
         .run(req, env)
         .await
 }
