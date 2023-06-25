@@ -43,7 +43,7 @@ thanks to the `wrangler.toml`, it will build the project before using it.
 
 Read the latest `worker` crate documentation here: https://docs.rs/worker
 
-### Production mode
+### Production mode  
 
 there is a `Makefile`, so you can run `make run-worker` to have the worker running directly on your machine only using 
 the [workerd runtime](https://github.com/cloudflare/workerd).
